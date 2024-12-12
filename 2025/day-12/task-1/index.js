@@ -1,10 +1,8 @@
-const fs = require('fs');
+import { readInput } from '../../../readInput'
 
-const data = fs.readFileSync('input.txt', 'utf-8');
+const map = readInput('./input.txt')
 
-const map = data.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-
-let plotsSet = new Set();
+let plotsSet = new Set()
 
 const findNextRegionCharacter = () => {
   for (let x = 0; x < map.length; x++) {
@@ -14,46 +12,44 @@ const findNextRegionCharacter = () => {
       }
     }
   }
-  return null;
+  return null
 }
 
-let currentCharacter = findNextRegionCharacter();
+let currentCharacter = findNextRegionCharacter()
 
-let result = 0;
+let result = 0
 
 while (currentCharacter !== null) {
-  const { x, y, value } = currentCharacter;
-  let area = 0;
-  let perimeter = 0;
-  findClosePlot(x, y);
-
+  const { x, y, value } = currentCharacter
+  let area = 0
+  let perimeter = 0
+  findClosePlot(x, y)
 
   function findClosePlot(x, y) {
     if (x < 0 || x >= map.length || y < 0 || y >= map[x].length) {
-      perimeter++;
-      return;
+      perimeter++
+      return
     }
 
     if (map[x][y] === value) {
       if (plotsSet.has(`${x},${y}`)) {
-        return;
+        return
       }
-      area++;
-      plotsSet.add(`${x},${y}`);
-      findClosePlot(x + 1, y);
-      findClosePlot(x - 1, y);
-      findClosePlot(x, y + 1);
-      findClosePlot(x, y - 1);
-    }else {
-      perimeter++;
+      area++
+      plotsSet.add(`${x},${y}`)
+      findClosePlot(x + 1, y)
+      findClosePlot(x - 1, y)
+      findClosePlot(x, y + 1)
+      findClosePlot(x, y - 1)
+    } else {
+      perimeter++
     }
   }
-  console.log({area, perimeter, value});
+  console.log({ area, perimeter, value })
 
-  result += area * perimeter;
+  result += area * perimeter
 
-  currentCharacter = findNextRegionCharacter();
+  currentCharacter = findNextRegionCharacter()
 }
 
-console.log(result);
-
+console.log(result)
